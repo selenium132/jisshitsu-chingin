@@ -10,41 +10,47 @@
 <meta property="og:description" content="昔の給料が今の物価で実質いくら相当か、消費者物価指数で換算する無料ツール。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jisshitsu-chingin.netlify.app/">
-<link rel="canonical" href="https://jisshitsu-chingin.netlify.app/">
-<!-- TODO(収益): AdSense審査通過後、ここに <script async src="https://pagead2.googlesyndication.com/...?client=ca-pub-XXXX"></script> を入れる -->
-<style>
-  :root{ --bg:#0f1b2d; --card:#fff; --ink:#1a2433; --sub:#5b6675; --accent:#1f7a8c; --accent2:#e8f4f6; --line:#e3e8ee; }
+<link rel="canonical" href="https://jisshitsu-chingin.netlify.app/"><style>
+  :root{ --bg:#fafafa; --card:#fff; --ink:#18181b; --sub:#71717a; --line:#e4e4e7; --accent:#4f46e5; --accent-dark:#4338ca; --accent-soft:#eef2ff; }
   *{ box-sizing:border-box; }
-  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; color:#1a2433; background:#f4f7fa; line-height:1.7; }
-  header{ background:linear-gradient(135deg,#0f1b2d,#1f7a8c); color:#fff; padding:28px 20px; }
-  .wrap{ max-width:760px; margin:0 auto; padding:0 16px; }
-  h1{ font-size:1.45rem; margin:0 0 6px; }
-  header p{ margin:0; opacity:.9; font-size:.95rem; }
-  main{ padding:24px 0 60px; }
-  .card{ background:#fff; border:1px solid #e3e8ee; border-radius:14px; padding:22px; margin:18px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
-  label{ display:block; font-weight:700; margin:14px 0 6px; font-size:.95rem; }
-  input,select{ width:100%; padding:12px 14px; font-size:1.05rem; border:1px solid #cdd5df; border-radius:10px; background:#fff; }
-  .row{ display:flex; gap:12px; flex-wrap:wrap; }
-  .row > div{ flex:1; min-width:140px; }
-  button{ width:100%; margin-top:18px; padding:14px; font-size:1.1rem; font-weight:700; color:#fff; background:#1f7a8c; border:0; border-radius:10px; cursor:pointer; }
-  button:active{ opacity:.85; }
-  .result{ display:none; margin-top:8px; }
+  body{ margin:0; font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; color:var(--ink); background:var(--bg); line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 20px; }
+  header{ padding:60px 0 24px; }
+  h1{ font-size:1.7rem; font-weight:700; letter-spacing:-0.02em; margin:0 0 10px; line-height:1.35; }
+  header p{ margin:0; color:var(--sub); font-size:1rem; }
+  main{ padding:4px 0 64px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px; margin:20px 0; }
+  label{ display:block; font-weight:600; margin:18px 0 8px; font-size:.9rem; }
+  .card > label:first-of-type{ margin-top:0; }
+  input,select{ width:100%; padding:12px 14px; font-size:1rem; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); font-family:inherit; transition:border-color .15s,box-shadow .15s; }
+  input:focus,select:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .row > div{ flex:1; min-width:150px; }
+  .row label{ margin-top:0; }
+  button{ width:100%; margin-top:24px; padding:14px; font-size:1rem; font-weight:600; color:#fff; background:var(--accent); border:0; border-radius:10px; cursor:pointer; transition:background .15s; }
+  button:hover{ background:var(--accent-dark); }
+  .result{ display:none; margin-top:24px; padding-top:24px; border-top:1px solid var(--line); }
   .result.show{ display:block; }
-  .big{ font-size:2rem; font-weight:800; color:#0f1b2d; margin:6px 0; }
-  .big small{ font-size:1rem; font-weight:600; color:#5b6675; }
-  .delta{ font-size:1.05rem; font-weight:700; }
-  .up{ color:#c0392b; } .down{ color:#1f7a8c; }
-  .note{ font-size:.85rem; color:#5b6675; }
-  .barwrap{ margin:18px 0 4px; }
-  .bar{ height:34px; border-radius:7px; background:#1f7a8c; color:#fff; display:flex; align-items:center; padding:0 10px; font-weight:700; white-space:nowrap; }
-  .bar.nominal{ background:#9aa7b5; }
-  .barlabel{ font-size:.85rem; color:#5b6675; margin-bottom:3px; }
-  h2{ font-size:1.15rem; margin-top:30px; }
-  .faq dt{ font-weight:700; margin-top:14px; }
-  .faq dd{ margin:4px 0 0; color:#3a4555; }
-  .ad{ background:#f0f3f7; border:1px dashed #c0cad6; border-radius:10px; padding:16px; text-align:center; color:#8a96a5; font-size:.85rem; }
-  footer{ font-size:.8rem; color:#7a8696; border-top:1px solid #e3e8ee; padding:22px 0; margin-top:30px; }
-  a{ color:#1f7a8c; }
+  .big{ font-size:1.45rem; font-weight:700; color:var(--ink); margin:8px 0; line-height:1.55; font-feature-settings:"tnum"; }
+  .big span{ color:var(--accent); }
+  .big small{ font-size:.95rem; font-weight:500; color:var(--sub); }
+  .delta{ font-size:1rem; font-weight:600; margin:10px 0; }
+  .up{ color:#dc2626; } .down{ color:var(--accent); }
+  .note{ font-size:.82rem; color:var(--sub); }
+  .barwrap{ margin:20px 0 4px; }
+  .bar{ height:38px; border-radius:8px; background:var(--accent); color:#fff; display:flex; align-items:center; padding:0 12px; font-weight:600; white-space:nowrap; font-feature-settings:"tnum"; transition:width .4s ease; }
+  .bar.nominal{ background:#d4d4d8; color:#3f3f46; }
+  .barlabel{ font-size:.82rem; color:var(--sub); margin-bottom:4px; }
+  h2{ font-size:1.05rem; font-weight:700; margin:0 0 8px; letter-spacing:-0.01em; }
+  h2.faq{ margin-top:28px; }
+  .card h2 ~ p{ color:var(--sub); font-size:.9rem; }
+  .faq dt{ font-weight:600; margin-top:16px; font-size:.9rem; }
+  .faq dd{ margin:6px 0 0; color:var(--sub); font-size:.88rem; }
+  .ad{ background:#fafafa; border:1px dashed var(--line); border-radius:12px; padding:18px; text-align:center; color:#a1a1aa; font-size:.82rem; }
+  footer{ font-size:.78rem; color:var(--sub); border-top:1px solid var(--line); padding:24px 0; margin-top:32px; }
+  footer strong{ color:var(--ink); }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -85,8 +91,6 @@
     </div>
   </div>
 
-  <div class="ad">広告枠（AdSense審査通過後に設置）</div>
-
   <div class="card">
     <h2>使い方</h2>
     <p>当時の給料（年収でも月収でもOK）と、その年、そして「比較したい年（今など）」を選んで計算するだけ。物価の変化を差し引いた実質的な価値が出ます。たとえば2020年の年収400万円は、物価が上がった今では同じ生活水準を保つのにいくら必要か、が分かります。</p>
@@ -101,8 +105,6 @@
       <dd>物価全体の平均的な変化に基づく概算です。実際の生活実感は品目（家賃・食料・教育費など）で異なります。参考値としてご利用ください。</dd>
     </dl>
   </div>
-
-  <div class="card ad">転職・家計関連の広告枠（アフィリエイト導線をここに設置）</div>
 
   <footer>
     <p><strong>データ出典：</strong>総務省統計局「2020年基準 消費者物価指数」総合（全国・年平均・持家の帰属家賃を含む総合）。2013〜2025年は確報値、1970〜2012年は2020年基準への公式接続指数を使用しています。<br>
@@ -174,7 +176,7 @@ document.getElementById('calc').addEventListener('click', ()=>{
   document.getElementById('barReal').textContent = yen(real);
 
   document.getElementById('realText').innerHTML =
-    from + '年の ' + yen(amount) + ' は、<br>' + to + '年の物価では <span style="color:#1f7a8c">' + yen(real) + '</span> 相当 <small>です</small>';
+    from + '年の ' + yen(amount) + ' は、<br>' + to + '年の物価では <span>' + yen(real) + '</span> 相当 <small>です</small>';
 
   const dEl = document.getElementById('deltaText');
   if(Math.abs(rate) < 0.05){
