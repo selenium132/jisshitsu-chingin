@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="YIUTujLobJ_8yfLeN2SngfKRilhHkL4mKM-TXYvOSVM" />
+<title>実質賃金・給料の価値計算ツール｜あの頃の給料は今いくら？</title>
+<meta name="description" content="昔の給料が今の物価で実質いくらに相当するかを計算。消費者物価指数（総務省CPI・2020年基準）で名目額を実質額に換算し、購買力の変化をグラフで表示する無料ツールです。">
+<meta property="og:title" content="実質賃金・給料の価値計算ツール｜あの頃の給料は今いくら？">
+<meta property="og:description" content="昔の給料が今の物価で実質いくら相当か、消費者物価指数で換算する無料ツール。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jisshitsu-chingin.netlify.app/">
+<link rel="canonical" href="https://jisshitsu-chingin.netlify.app/">
+<!-- TODO(収益): AdSense審査通過後、ここに <script async src="https://pagead2.googlesyndication.com/...?client=ca-pub-XXXX"></script> を入れる -->
+<style>
+  :root{ --bg:#0f1b2d; --card:#fff; --ink:#1a2433; --sub:#5b6675; --accent:#1f7a8c; --accent2:#e8f4f6; --line:#e3e8ee; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; color:#1a2433; background:#f4f7fa; line-height:1.7; }
+  header{ background:linear-gradient(135deg,#0f1b2d,#1f7a8c); color:#fff; padding:28px 20px; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 16px; }
+  h1{ font-size:1.45rem; margin:0 0 6px; }
+  header p{ margin:0; opacity:.9; font-size:.95rem; }
+  main{ padding:24px 0 60px; }
+  .card{ background:#fff; border:1px solid #e3e8ee; border-radius:14px; padding:22px; margin:18px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  label{ display:block; font-weight:700; margin:14px 0 6px; font-size:.95rem; }
+  input,select{ width:100%; padding:12px 14px; font-size:1.05rem; border:1px solid #cdd5df; border-radius:10px; background:#fff; }
+  .row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .row > div{ flex:1; min-width:140px; }
+  button{ width:100%; margin-top:18px; padding:14px; font-size:1.1rem; font-weight:700; color:#fff; background:#1f7a8c; border:0; border-radius:10px; cursor:pointer; }
+  button:active{ opacity:.85; }
+  .result{ display:none; margin-top:8px; }
+  .result.show{ display:block; }
+  .big{ font-size:2rem; font-weight:800; color:#0f1b2d; margin:6px 0; }
+  .big small{ font-size:1rem; font-weight:600; color:#5b6675; }
+  .delta{ font-size:1.05rem; font-weight:700; }
+  .up{ color:#c0392b; } .down{ color:#1f7a8c; }
+  .note{ font-size:.85rem; color:#5b6675; }
+  .barwrap{ margin:18px 0 4px; }
+  .bar{ height:34px; border-radius:7px; background:#1f7a8c; color:#fff; display:flex; align-items:center; padding:0 10px; font-weight:700; white-space:nowrap; }
+  .bar.nominal{ background:#9aa7b5; }
+  .barlabel{ font-size:.85rem; color:#5b6675; margin-bottom:3px; }
+  h2{ font-size:1.15rem; margin-top:30px; }
+  .faq dt{ font-weight:700; margin-top:14px; }
+  .faq dd{ margin:4px 0 0; color:#3a4555; }
+  .ad{ background:#f0f3f7; border:1px dashed #c0cad6; border-radius:10px; padding:16px; text-align:center; color:#8a96a5; font-size:.85rem; }
+  footer{ font-size:.8rem; color:#7a8696; border-top:1px solid #e3e8ee; padding:22px 0; margin-top:30px; }
+  a{ color:#1f7a8c; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>あの頃の給料は今いくら？ 実質賃金計算ツール</h1>
+    <p>昔の給料を、消費者物価指数（総務省CPI）で「今の物価でいくら相当か」に換算します。</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="card">
+    <label for="amount">給料・年収（円）</label>
+    <input id="amount" type="number" inputmode="numeric" placeholder="例：4000000" value="4000000">
+    <div class="row">
+      <div>
+        <label for="fromYear">いつの給料？（西暦）</label>
+        <select id="fromYear"></select>
+      </div>
+      <div>
+        <label for="toYear">いつの物価で見る？（西暦）</label>
+        <select id="toYear"></select>
+      </div>
+    </div>
+    <button id="calc">実質額を計算する</button>
+
+    <div id="result" class="result">
+      <div class="barwrap">
+        <div class="barlabel" id="fromLabel"></div>
+        <div class="bar nominal" id="barNominal"></div>
+        <div class="barlabel" id="toLabel" style="margin-top:10px;"></div>
+        <div class="bar" id="barReal"></div>
+      </div>
+      <p class="big" id="realText"></p>
+      <p class="delta" id="deltaText"></p>
+      <p class="note" id="explainText"></p>
+    </div>
+  </div>
+
+  <div class="ad">広告枠（AdSense審査通過後に設置）</div>
+
+  <div class="card">
+    <h2>使い方</h2>
+    <p>当時の給料（年収でも月収でもOK）と、その年、そして「比較したい年（今など）」を選んで計算するだけ。物価の変化を差し引いた実質的な価値が出ます。たとえば2020年の年収400万円は、物価が上がった今では同じ生活水準を保つのにいくら必要か、が分かります。</p>
+
+    <h2 class="faq">よくある質問</h2>
+    <dl class="faq">
+      <dt>実質賃金って何ですか？</dt>
+      <dd>受け取った金額（名目賃金）から、物価の変化の影響を取り除いた「実際に買える量」で見た賃金です。給料の額面が同じでも、物価が上がれば実質賃金は下がります。</dd>
+      <dt>どんな計算をしていますか？</dt>
+      <dd>「名目額 ÷ その年のCPI × 比較年のCPI」で換算しています。CPIは総務省の消費者物価指数（総合・2020年＝100）を使用しています。</dd>
+      <dt>正確ですか？</dt>
+      <dd>物価全体の平均的な変化に基づく概算です。実際の生活実感は品目（家賃・食料・教育費など）で異なります。参考値としてご利用ください。</dd>
+    </dl>
+  </div>
+
+  <div class="card ad">転職・家計関連の広告枠（アフィリエイト導線をここに設置）</div>
+
+  <footer>
+    <p><strong>データ出典：</strong>総務省統計局「2020年基準 消費者物価指数」総合（全国・年平均・持家の帰属家賃を含む総合）。2013〜2025年は確報値、1970〜2012年は2020年基準への公式接続指数を使用しています。<br>
+    最新値は<a href="https://www.stat.go.jp/data/cpi/" target="_blank" rel="noopener">総務省統計局</a>および<a href="https://www.e-stat.go.jp/" target="_blank" rel="noopener">e-Stat</a>でご確認いただけます。</p>
+    <p><strong>免責：</strong>本ツールの計算結果は物価全体（総合CPI）の平均的な変動に基づく概算であり、特定の家計・品目・地域の実態を保証するものではありません。</p>
+  </footer>
+</main>
+
+<script>
+/* =========================================================
+   消費者物価指数（総合・2020年基準＝100・年平均）
+   出典：総務省統計局「2020年基準 消費者物価指数」総合（全国・年平均・持家の帰属家賃を含む総合）
+   ・2013〜2025：統計局公式の確報値（2025年は2026/1公表の年平均確報）
+   ・1970〜2012：総務省の公式接続指数（旧基準を2020年基準へリンク換算した公式値）
+   ・複数ソース（e-Stat長期時系列／IMF系列／統計局PDF）で全年が小数第1位まで一致を確認済み
+   年次更新は、翌年の年平均確報が出たらこのオブジェクトに1行追記するだけ。
+   ========================================================= */
+const CPI = {
+  1970: 30.9, 1971: 32.9, 1972: 34.5, 1973: 38.6, 1974: 47.5,
+  1975: 53.1, 1976: 58.1, 1977: 62.8, 1978: 65.5, 1979: 67.9,
+  1980: 73.2, 1981: 76.7, 1982: 78.9, 1983: 80.3, 1984: 82.2,
+  1985: 83.8, 1986: 84.3, 1987: 84.4, 1988: 85.0, 1989: 86.9,
+  1990: 89.6, 1991: 92.6, 1992: 94.1, 1993: 95.4, 1994: 96.0,
+  1995: 95.9, 1996: 96.0, 1997: 97.7, 1998: 98.3, 1999: 98.0,
+  2000: 97.3, 2001: 96.7, 2002: 95.8, 2003: 95.5, 2004: 95.5,
+  2005: 95.2, 2006: 95.5, 2007: 95.5, 2008: 96.8, 2009: 95.5,
+  2010: 94.8, 2011: 94.5, 2012: 94.5, 2013: 94.9, 2014: 97.5,
+  2015: 98.2, 2016: 98.1, 2017: 98.6, 2018: 99.5, 2019: 100.0,
+  2020: 100.0, 2021: 99.8, 2022: 102.3, 2023: 105.6, 2024: 108.5,
+  2025: 111.9
+};
+
+const years = Object.keys(CPI).map(Number).sort((a,b)=>a-b);
+const latest = years[years.length-1];
+
+function fillSelect(id, defaultYear){
+  const sel = document.getElementById(id);
+  years.forEach(y=>{
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y + '年';
+    if(y===defaultYear) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+fillSelect('fromYear', 2020);
+fillSelect('toYear', latest);
+
+const yen = n => '¥' + Math.round(n).toLocaleString('ja-JP');
+
+document.getElementById('calc').addEventListener('click', ()=>{
+  const amount = Number(document.getElementById('amount').value);
+  const from = Number(document.getElementById('fromYear').value);
+  const to = Number(document.getElementById('toYear').value);
+  if(!amount || amount<=0){ alert('給料・年収を入力してください'); return; }
+
+  const real = amount / CPI[from] * CPI[to];
+  const diff = real - amount;
+  const rate = (real/amount - 1) * 100;
+
+  // バー（名目を基準幅に、実質を比率で）
+  const maxv = Math.max(amount, real);
+  const wN = Math.round(amount/maxv*100);
+  const wR = Math.round(real/maxv*100);
+  document.getElementById('fromLabel').textContent = from + '年の給料（名目）';
+  document.getElementById('barNominal').style.width = wN + '%';
+  document.getElementById('barNominal').textContent = yen(amount);
+  document.getElementById('toLabel').textContent = to + '年の物価でみた相当額（実質）';
+  document.getElementById('barReal').style.width = wR + '%';
+  document.getElementById('barReal').textContent = yen(real);
+
+  document.getElementById('realText').innerHTML =
+    from + '年の ' + yen(amount) + ' は、<br>' + to + '年の物価では <span style="color:#1f7a8c">' + yen(real) + '</span> 相当 <small>です</small>';
+
+  const dEl = document.getElementById('deltaText');
+  if(Math.abs(rate) < 0.05){
+    dEl.textContent = 'この間、物価はほぼ変わっていません。';
+    dEl.className = 'delta';
+  } else if(rate > 0){
+    dEl.innerHTML = '物価上昇により、同じ生活水準を保つには <span class="up">+' + yen(diff) + '（+' + rate.toFixed(1) + '%）</span> 必要になっています。';
+    dEl.className = 'delta';
+  } else {
+    dEl.innerHTML = '物価が下がったため、実質的な価値は <span class="down">' + yen(diff) + '（' + rate.toFixed(1) + '%）</span> 変化しています。';
+    dEl.className = 'delta';
+  }
+
+  document.getElementById('explainText').textContent =
+    '計算式：' + yen(amount) + ' ÷ ' + CPI[from] + '（' + from + '年CPI）× ' + CPI[to] + '（' + to + '年CPI）。CPIは総務省 消費者物価指数（総合・2020年＝100）。';
+
+  document.getElementById('result').classList.add('show');
+});
+</script>
+</body>
+</html>
