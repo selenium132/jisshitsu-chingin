@@ -2,7 +2,7 @@
 
 名目賃金と消費者物価指数（CPI）から、物価変動を除いた実質的な購買力＝**実質賃金**を計算するWebツールです。AI開発支援ツール（Cursor / Claude Code）を活用し、早稲田大学3年（文化構想学部）在学中に個人で企画・実装・公開しました。
 
-🔗 **公開URL: https://jisshitsu-chingin.netlify.app**
+🔗 **公開URL: https://selenium132.github.io/jisshitsu-chingin**
 
 ## 何ができるか
 - 名目賃金と任意の2時点を選び、実質賃金（物価変動を除いた購買力）を計算
